@@ -9,15 +9,14 @@ int main(int argc, char const *argv[]){
 	srand(time(NULL));
 	int dec = 0;
 	float elapsed_time;
-	FILE *fp;		// file pointer, used for both in and out since they dont overlap
+	FILE *fp;// file pointer, used for both in and out since they dont overlap
 	char filename[BUFFSIZE];// storing filename
 	char *p; // removing trailing \n in filename input
 	char *fileerror;
 
-	//  host array pointers
-	int *host_a, *host_b, *host_c;
-	//	device array pointers
-	int *dev_a, *dev_b, *dev_c;
+	
+	int *host_a, *host_b, *host_c;	//  host array pointers
+	int *dev_a, *dev_b, *dev_c;		//	device array pointers
 
 	printf("Would you like to load your arrays from a file(1) or have them");
 	printf(" generated(0)? ");
@@ -28,7 +27,7 @@ int main(int argc, char const *argv[]){
 
 	if(dec){
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
-		char buff[BUFFSIZE];	// for reading in lines to be parsed
+		//char buff[BUFFSIZE];	// for reading in lines to be parsed
 
 		printf("Enter filename for input: ");
 		fgets(filename, BUFFSIZE ,stdin);				// read in filename
@@ -42,22 +41,34 @@ int main(int argc, char const *argv[]){
 		fp = fopen(filename,"r"); 
 
 //;asdilf;lasdfk;sdfjlak;sdfjlalk;asdfjasdfkl;jasdfkl;j
+
+
+
+
+
 		printf("before the while\n");
-//	int r =0;
-		while( fgets(buff, BUFFSIZE, fp) ){
-			printf("%s", buff);
-//			r++;
-//		printf("%d\n", r);
-		}
+
+		//GET MATRICES DIMENSIONS
+	    fscanf(fp, "%d %d %d", &m, &n, &k);
+		newline();
+
+
+//CONSOLIDATE THESE MALLOCS TO BEFORE THE IF ELSE IF POSSIBLE
+		cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
+		cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // first array
+
+		fillmatfromfile(fp, host_a, m, n);
+		fillmatfromfile(fp, host_b, n, k);
+		
 		printf("CLOsinG TiME\n");
 		fclose(fp);
-//;asdilf;lasdfk;sdfjlak;sdfjlalk;asdfjasdfkl;jasdfkl;j
-		printf("passed the while");
 
 
 /* 
 THIS IS THE PARTS YOURE WORKING ON
 read in the matrices and store them in the arrays
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 */
 
 	}else{
@@ -76,18 +87,14 @@ read in the matrices and store them in the arrays
 	    printf("please type in array dimensions m, n, and k: ");
 	    scanf("%d %d %d", &m, &n, &k);
 
+// YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
+
 		cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
 		cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
 		cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
+
 // CHANGE VARIABLe; Clean this up
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
-/*	
-		// FILL MATRICES
-		matfill(host_a, m, n);
-		printf("Matrix A filled\n");
-		matfill(host_b, n, k);
-		printf("Matrix B filled\n");
-*/	
 	
 		// FILL MATRICES AND FILE
 
@@ -96,9 +103,7 @@ read in the matrices and store them in the arrays
 			if(fileerror == NULL){
 				printf("fileerror = NULL; YHOU FUHAILED!\n");
 			}
-
 			//FILENAME FIXER
-
 			if((p = strchr(filename, '\n')) != NULL){ //remove newline
 				printf("in the filenam fixer\n");
 				*p = '\0';								
@@ -107,10 +112,9 @@ read in the matrices and store them in the arrays
 			printf("Opening %s for writing\n", filename);
 			fp = fopen(filename,"w");
 			printf("Opened %s for writing\n", filename);
+		
+	// FILLs Matrices and stores them in a file
 			matfilefill(fp, host_a, host_b, m, n, k);
-
-//			matfilefillfunc(fp, host_a, m, n);
-//			matfilefillfunc(fp, host_b, n, k);
 			printf("Matrices filled and output to file %s\n", filename);
 			fclose(fp);
 
@@ -124,14 +128,14 @@ read in the matrices and store them in the arrays
 		if(matprint(host_a, m, n)){
 			printf("Matrix A filled\n");
 		}else{
-			printf("DANGER DANGER DANGER!!!! NO MATRIX IN THE FLUX RAY!!\n");
+			printf("DANGER DANGER!!!! NO MATRIX IN THE FLUX RAY!!\n");
 		}
 
 		if(matprint(host_b, n, k)){
 			printf("Matrix B filled\n");
 		
 		}else{
-			printf("DANGER DANGER DANGER!!!! NO MATRIX IN THE QUANTUM CARBURETOR!!\n");
+			printf("DANGER DANGER!!!! NO MATRIX IN THE QUANTUM CARBURETOR!!\n");
 		}
 */
 	}
@@ -160,7 +164,7 @@ printf("OOT OF THE IF?ELSE\n");
 	cudaMemcpy(dev_a, host_a, sizeof(int) * m * n, cudaMemcpyHostToDevice);
 	cudaMemcpy(dev_b, host_b, sizeof(int) * n * k, cudaMemcpyHostToDevice);
 
-	// I dont fully understand this
+	// Preparind dimGrid and dimBlock for use in gpu_matrix_mult function
 	unsigned int grid_rows = (m + BLOCK_SIZE - 1) / BLOCK_SIZE; 
 	unsigned int grid_cols = (k + BLOCK_SIZE - 1) / BLOCK_SIZE; 
 	dim3 dimGrid(grid_cols, grid_rows);
@@ -184,11 +188,14 @@ printf("OOT OF THE IF?ELSE\n");
 	printf("Time elapsed: %f\n", elapsed_time);
 
 	// Free the mmeory so it isnt banished into eternity
-	cudaFree(host_a);
-	cudaFree(host_b);
-	cudaFree(host_c);
+	cudaFree(dev_a);
+	cudaFree(dev_b);
+	cudaFree(dev_c);
+	printf("cudaFreed\n");
 	cudaFreeHost(host_a);
+	printf("cudaFreedHost\n");
 	cudaFreeHost(host_b);
 	cudaFreeHost(host_c);
-}
 
+	printf("Program OVER!\n");
+}

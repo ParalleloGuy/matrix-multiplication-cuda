@@ -64,7 +64,7 @@ void matprint(int *host_arr, int m, int n){
 	for(i = 0;i < m; ++i){
 		for(j = 0;j < n; ++j){
 		//	host_arr[i * n + j] = rand() % 1024;
-               printf("%6d ",host_arr[i * n + j]);
+               printf("%8d ",host_arr[i * n + j]);
 		}
 		printf("\n");
 	}	
@@ -72,16 +72,20 @@ void matprint(int *host_arr, int m, int n){
 
 void fillmatfromfile(FILE * fp, int *host_arr, int m, int n){
 	int i, j;
-	//int temp;
-	char buff[BUFFSIZE];
+	int temp;
+	//char buff[BUFFSIZE];
 		for(i = 0;i < m; ++i){
 			for(j = 0;j < n; ++j){
-				while(fgets(buff, BUFFSIZE,fp)){};
-			    printf("%s",buff);
-			    printf("\n");
+				fscanf(fp, "%d", &temp);
+				host_arr[i * n + j] = temp;
+			printf("%d", temp);
+		//		while(fgets(buff, BUFFSIZE,fp)){};
+		//	    printf("%s",buff);
+	//		    printf("\n");
 //				host_arr[i * n + j] = rand() % 512;// SET IT EQUAL TO THE OUTPUT OF THE FILE
 //                printf("%d\n",host_arr[i * n + j]);
 			}
+		printf("\n");
 		}	
 }
 
@@ -103,7 +107,7 @@ void matfilefillfunc(FILE *ofp, int *host_arr, int m, int n){
 //			printf("innerloop start yea k thanks bye\n");
 			temp = rand() % 512;
 			host_arr[i * n + j] = temp;
-			fprintf(ofp, "%6d ", temp);
+			fprintf(ofp, "%8d ", temp);
 //			printf("%d\n", host_arr[i * n + j]);
 		}
 		fprintf(ofp, "\n");

@@ -7,6 +7,7 @@
 
 void matfillrand(FILE *fp, int m, int n, int k);
 void matfilluser(FILE *fp, int m, int n, int k);
+void newline();
 
 
 /*******************************
@@ -87,3 +88,6 @@ void matfilluser(FILE *fp, int m, int n, int k){
 	}
 }
           
+void newline(){
+	printf("\n");
+}
