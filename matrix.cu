@@ -21,9 +21,9 @@ int main(int argc, char const *argv[]){
 	printf("Would you like to load your arrays from a file(1) or have them");
 	printf(" generated(0)? ");
 	dec = getchar() - '0';
-	printf("dec = %d", dec);
 
-	printf("\n");
+//	printf("dec = %d", dec);
+	newline();
 
 	if(dec){
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
@@ -40,111 +40,116 @@ int main(int argc, char const *argv[]){
 		printf("Opening %s for reading\n", filename);	//open filename
 		fp = fopen(filename,"r"); 
 
-//;asdilf;lasdfk;sdfjlak;sdfjlalk;asdfjasdfkl;jasdfkl;j
-
-
-
-
-
-		printf("before the while\n");
-
 		//GET MATRICES DIMENSIONS
 	    fscanf(fp, "%d %d %d", &m, &n, &k);
 		newline();
 
-
 //CONSOLIDATE THESE MALLOCS TO BEFORE THE IF ELSE IF POSSIBLE
+
 		cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
 		cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // first array
 
+		//	fille matricies from file
 		fillmatfromfile(fp, host_a, m, n);
 		fillmatfromfile(fp, host_b, n, k);
 		
-		printf("CLOsinG TiME\n");
-		fclose(fp);
-
-
-/* 
-THIS IS THE PARTS YOURE WORKING ON
-read in the matrices and store them in the arrays
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-*/
-
+		if(!fclose(fp)){
+			printf("CLOsinG TiME\n");
+		}else{
+			printf("No Close for YOU\n");
+		}
+		
 	}else{
+		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
+	    printf("Would you you like to save the randomly generated matrices");
+	    printf(" to a file (y/n)? ");
+		
+		dec = getchar();
+		//printf("%c\n", (char)dec);
 
-//	    printf("Would you you like to save the randomly generated matrices");
-//	    printf(" to a file?\n");
-//		fgets(filename, BUFFSIZE ,stdin);
-
-/*
-	1. store randomly generated matricies in a file
-	2. 
-	3. add control structure
-*/
 		// *** can you clean up the flow? this is in both if and else. 
+		if(dec == 'y'){
+			printf("dec = %d", (int)dec);
+			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
+			printf("dec = %d", (int)dec);
 
-	    printf("please type in array dimensions m, n, and k: ");
-	    scanf("%d %d %d", &m, &n, &k);
+
+
+
+
+
+
+
+
+
+
+		    printf("please type in array dimensions m, n, and k: ");
+		    scanf("%d %d %d", &m, &n, &k);
 
 // YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
-
-		cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
-		cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
-		cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
+			cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
+			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
+			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
 
 // CHANGE VARIABLe; Clean this up
-		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
-	
+			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
 		// FILL MATRICES AND FILE
 
 			printf("Enter filename for saving: ");
 			fileerror = fgets(filename, BUFFSIZE ,stdin);
 			if(fileerror == NULL){
-				printf("fileerror = NULL; YHOU FUHAILED!\n");
+				printf("Could not open %s\n", filename);
 			}
 			//FILENAME FIXER
 			if((p = strchr(filename, '\n')) != NULL){ //remove newline
-				printf("in the filenam fixer\n");
+//				printf("in the filename fixer\n");
 				*p = '\0';								
 			}
 
 			printf("Opening %s for writing\n", filename);
-			fp = fopen(filename,"w");
-			printf("Opened %s for writing\n", filename);
-		
-	// FILLs Matrices and stores them in a file
+			if(fp = fopen(filename,"w")){
+				printf("Opened %s for writing\n", filename);
+			}else{
+				printf("Could not open %s for writing\n", filename);
+			}	
+	
+		// FILLs Matrices and stores them in a file
 			matfilefill(fp, host_a, host_b, m, n, k);
 			printf("Matrices filled and output to file %s\n", filename);
-			fclose(fp);
 
+			if(!fclose(fp)){
+				printf("Closed %s\n", filename);
+			}else{
+				printf("lol no close for you\n");
+			}
+
+
+
+
+
+
+
+
+
+		}else{ // could check if n but... well... get to that later...
+		    printf("please type in array dimensions m, n, and k: ");
+		    scanf("%d %d %d", &m, &n, &k);
+// YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
+			cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
+			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
+			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
+			matfill(host_a, m, n);
+			matfill(host_b, n, k);
+		}
 
 		// PRINT
-		matprint(host_a, m, n);
-		printf("\n");
-		matprint(host_b, n, k);
-		printf("\n");
-/*
-		if(matprint(host_a, m, n)){
-			printf("Matrix A filled\n");
-		}else{
-			printf("DANGER DANGER!!!! NO MATRIX IN THE FLUX RAY!!\n");
-		}
-
-		if(matprint(host_b, n, k)){
-			printf("Matrix B filled\n");
-		
-		}else{
-			printf("DANGER DANGER!!!! NO MATRIX IN THE QUANTUM CARBURETOR!!\n");
-		}
-*/
+			matprint(host_a, m, n);
+			printf("\n");
+			matprint(host_b, n, k);
+			printf("\n");
 	}
 
 printf("OOT OF THE IF?ELSE\n");
-
-	//SEG FAULT!! YOU NEED TO GO BACK TO THE : BLURG
-
-
 
 	// for measuring time	
 	cudaEvent_t start, stop;
@@ -157,7 +162,7 @@ printf("OOT OF THE IF?ELSE\n");
 	
 	// Allocate space for arrays on DEVICE
 	cudaMalloc((void **) &dev_a, sizeof(int) * m * n); // first array
-	cudaMalloc((void **) &dev_b, sizeof(int) * n * k); // second array
+	cudaMalloc((void **) &dev_b, sizeof(int) * n * k); // first array
 	cudaMalloc((void **) &dev_c, sizeof(int) * m * k); // product of arrays
 
 	// Copy matricies from HOST to DEVICE
