@@ -60,7 +60,7 @@ void matfilluser(FILE *fp, int m, int n, int k){
 	fprintf(fp,"%d %d %d\n", m, n, k);
 
 	printf("\n");
-	printf("Matrix 1: ");
+	printf("Matrix 1:\n");
 
 	// fill matrix 1
     for(i = 0; i < m; i++){
@@ -75,7 +75,7 @@ void matfilluser(FILE *fp, int m, int n, int k){
 	fprintf(fp,"\n");
 
 	printf("\n");
-	printf("Matrix 2: ");
+	printf("Matrix 2:\n");
 
 	// fill matrix 2
 	for(i = 0; i < n; i++){

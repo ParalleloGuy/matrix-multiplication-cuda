@@ -16,47 +16,50 @@ int main(){
 	srand(time(NULL));
 	char filename[MAX_NAME];
 	char *p;				// for removing \n from filename after input
+	char dec;
+	char dump;
 	
 	// user input 	
-		printf("Enter filename for output: ");
-		fgets(filename, MAX_NAME, stdin);
+	printf("Would you like to have your matricies generated randomly(1) or");
+	printf(" enter them manually(0)? ");
+	dec = getchar() - '0';
 
-		if((p = strchr(filename, '\n')) != NULL){
-			*p = '\0'; //remove newline
-		}
+while((dump = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
 
-		printf("Opening %s for writing\n", filename);
-		fp = fopen(filename,"w");
+
+	printf("Enter filename for output: ");
+	fgets(filename, MAX_NAME, stdin);
+
+	if((p = strchr(filename, '\n')) != NULL){
+		*p = '\0'; //remove newline
+	}
+
+	printf("Opening %s for writing\n", filename);
+	fp = fopen(filename,"w");
+
+	printf("Enter m, n, k: ");
+	scanf("%d %d %d", &m, &n, &k);
+
+	if(dec){	
 	
-		printf("Enter m, n, k: ");
-		scanf("%d %d %d", &m, &n, &k);
-
-	//matrix 1 m * n
-	
-/*
-	matfilluser(fp, m, n, k*);
-			
-			
-
-	//matrix 2 n * k
-
-*/
-	// fill matrices
+// fill matrices
 		printf("Filling Matricies\n");
 		matfillrand(fp, m, n, k);
+// file stuff
+// PRINT FILE
+		}else{
+			matfilluser(fp, m, n, k);
+		}
 
-
-
-
-	// file stuff
 		printf("Closing %s\n", filename);
 		fclose(fp);
 
 		printf("Opening %s for reading\n", filename);
 		fp = fopen(filename,"r");
+	
 
 
-// PRINT FILE
+
 
 		while(fgets(buff, BUFFSIZE,fp))
 			printf("%s",buff);

@@ -12,6 +12,8 @@ void matfill(int *host_arr, int m, int n);
 void matprint(int *host_arr, int m, int n);
 void matfilefill(FILE *ofp, int *host_arr_a, int *host_arr_b, int m, int n, int k);
 void matfilefillfunc(FILE *ofp, int *host_arr, int m, int n);
+void fillmatfromfile(FILE * fp, int *host_arr_a, int *host_arr_b, int m, int n, int k);
+void fillmatfromfilefunc(FILE * fp, int *host_arr_a, int m, int n);
 
 
 /*********************************
@@ -70,7 +72,14 @@ void matprint(int *host_arr, int m, int n){
 	}	
 }
 
-void fillmatfromfile(FILE * fp, int *host_arr, int m, int n){
+
+
+void fillmatfromfile(FILE * fp, int *host_arr_a, int *host_arr_b, int m, int n, int k){
+	fillmatfromfilefunc(fp, host_arr_a, m, n);
+	fillmatfromfilefunc(fp, host_arr_b, n, k);
+}
+
+void fillmatfromfilefunc(FILE * fp, int *host_arr, int m, int n){
 	int i, j;
 	int temp;
 	//char buff[BUFFSIZE];

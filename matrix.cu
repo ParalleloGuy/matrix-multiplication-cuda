@@ -46,8 +46,7 @@ int main(int argc, char const *argv[]){
 		cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // first array
 
 		//	fille matricies from file
-		fillmatfromfile(fp, host_a, m, n);
-		fillmatfromfile(fp, host_b, n, k);
+		fillmatfromfile(fp, host_a, host_b, m, n, k);
 		
 		if(!fclose(fp)){
 			printf("Closed \"%s\"\n", filename);
