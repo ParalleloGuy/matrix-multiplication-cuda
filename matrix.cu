@@ -161,7 +161,7 @@ int main(int argc, char const *argv[]){
 //	printf("Matricies multiplied: %d * %d . %d * %d\n", m, n, ,n, k);
 //	printf("abbagamba\n");
 
-	printf("World Domination Computation Completed Professor\n");
+	printf("World Domination Computation Completed Professor\n\n");
 	matprint(host_c, m, k);
 	printf("Time elapsed: %f\n", elapsed_time);
 
