@@ -157,7 +157,7 @@ int main(int argc, char const *argv[]){
 	cudaEventSynchronize(stop);
 	cudaEventElapsedTime(&elapsed_time, start, stop);
 	
-//	printf("Matricies multiplied: %d * %d . %d * %d\n", m, n, ,n, k);
+	printf("Matricies multiplied: %dx%d . %dx%d\n", m, n, n, k);
 //	printf("abbagamba\n");
 
 	printf("World Domination Computation Completed Professor\n\n");
@@ -168,9 +168,9 @@ int main(int argc, char const *argv[]){
 	cudaFree(dev_a);
 	cudaFree(dev_b);
 	cudaFree(dev_c);
-//	printf("cudaFreed\n");
+	printf("cudaFreed\n");
 	cudaFreeHost(host_a);
-//	printf("cudaFreedHost\n");
+	printf("cudaFreedHost\n");
 	cudaFreeHost(host_b);
 	cudaFreeHost(host_c);
 

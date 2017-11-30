@@ -56,7 +56,6 @@ n  - columns
 void matfilluser(FILE *fp, int m, int n, int k){ 
     int i, j, temp;
 
-	
 	fprintf(fp,"%d %d %d\n", m, n, k);
 
 	printf("\n");
