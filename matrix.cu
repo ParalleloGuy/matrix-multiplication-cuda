@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]){
 //	printf("dec = %d", dec);
 	newline();
 
-	if(dec){
+	if(dec){ // loads from file
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
 		//char buff[BUFFSIZE];	// for reading in lines to be parsed
 
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[]){
 			printf("No Close for YOU\n");
 		}
 		
-	}else{
+	}else{							// randomly generates matricies
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
 	    printf("Would you you like to save the randomly generated matrices");
 	    printf(" to a file (y/n)? ");
@@ -68,7 +68,7 @@ int main(int argc, char const *argv[]){
 		//printf("%c\n", (char)dec);
 
 		// *** can you clean up the flow? this is in both if and else. 
-		if(dec == 'y'){
+		if(dec == 'y'){			// saves the randome matricies to a file
 
 			printf("dec = %d\n", (int)dec);
 			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
@@ -100,34 +100,9 @@ int main(int argc, char const *argv[]){
 			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
 			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
 
-// CHANGE VARIABLe; Clean this up
-			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
-		// FILL MATRICES AND FILE
-/*
+			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX ?????????
 
-
-			printf("Enter filename for saving: ");
-			fileerror = fgets(filename, BUFFSIZE ,stdin);
-			if(fileerror == NULL){
-				printf("Could not open %s\n", filename);
-			}
-			//FILENAME FIXER
-			if((p = strchr(filename, '\n')) != NULL){ //remove newline
-//				printf("in the filename fixer\n");
-				*p = '\0';								
-			}
-
-			printf("Opening %s for writing\n", filename);
-			if(fp = fopen(filename,"w")){
-				printf("Opened %s for writing\n", filename);
-			}else{
-				printf("Could not open %s for writing\n", filename);
-			}	
-	
-
-
-*/
-		// FILLs Matrices and stores them in a file
+			// fills Matrices and stores them in a file
 			matfilefill(fp, host_a, host_b, m, n, k);
 			printf("Matrices filled and output to file %s\n", filename);
 
@@ -139,13 +114,7 @@ int main(int argc, char const *argv[]){
 
 
 
-
-
-
-
-
-
-		}else{ // could check if n but... well... get to that later...
+		}else{ //could check if n but... well... get to that later...
 		    printf("please type in array dimensions m, n, and k: ");
 		    scanf("%d %d %d", &m, &n, &k);
 // YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
