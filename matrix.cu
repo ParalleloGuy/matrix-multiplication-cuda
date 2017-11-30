@@ -69,31 +69,10 @@ int main(int argc, char const *argv[]){
 
 		// *** can you clean up the flow? this is in both if and else. 
 		if(dec == 'y'){
-			printf("dec = %d", (int)dec);
+
+			printf("dec = %d\n", (int)dec);
 			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
-			printf("dec = %d", (int)dec);
-
-
-
-
-
-
-
-
-
-
-
-		    printf("please type in array dimensions m, n, and k: ");
-		    scanf("%d %d %d", &m, &n, &k);
-
-// YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
-			cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
-			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
-			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
-
-// CHANGE VARIABLe; Clean this up
-			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
-		// FILL MATRICES AND FILE
+			printf("dec = %d\n", (int)dec);
 
 			printf("Enter filename for saving: ");
 			fileerror = fgets(filename, BUFFSIZE ,stdin);
@@ -113,6 +92,41 @@ int main(int argc, char const *argv[]){
 				printf("Could not open %s for writing\n", filename);
 			}	
 	
+		    printf("please type in array dimensions m, n, and k: ");
+		    scanf("%d %d %d", &m, &n, &k);
+
+// YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
+			cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
+			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
+			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
+
+// CHANGE VARIABLe; Clean this up
+			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
+		// FILL MATRICES AND FILE
+/*
+
+
+			printf("Enter filename for saving: ");
+			fileerror = fgets(filename, BUFFSIZE ,stdin);
+			if(fileerror == NULL){
+				printf("Could not open %s\n", filename);
+			}
+			//FILENAME FIXER
+			if((p = strchr(filename, '\n')) != NULL){ //remove newline
+//				printf("in the filename fixer\n");
+				*p = '\0';								
+			}
+
+			printf("Opening %s for writing\n", filename);
+			if(fp = fopen(filename,"w")){
+				printf("Opened %s for writing\n", filename);
+			}else{
+				printf("Could not open %s for writing\n", filename);
+			}	
+	
+
+
+*/
 		// FILLs Matrices and stores them in a file
 			matfilefill(fp, host_a, host_b, m, n, k);
 			printf("Matrices filled and output to file %s\n", filename);
