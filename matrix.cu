@@ -14,16 +14,12 @@ int main(int argc, char const *argv[]){
 	char *p; // removing trailing \n in filename input
 	char *fileerror;
 
-	
 	int *host_a, *host_b, *host_c;	//  host array pointers
 	int *dev_a, *dev_b, *dev_c;		//	device array pointers
 
 	printf("Would you like to load your arrays from a file(1) or have them");
 	printf(" generated(0)? ");
 	dec = getchar() - '0';
-
-//	printf("dec = %d", dec);
-	newline();
 
 	if(dec){ // loads from file
 		while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff
@@ -33,16 +29,16 @@ int main(int argc, char const *argv[]){
 		fgets(filename, BUFFSIZE ,stdin);				// read in filename
 		//FILENAME FIXER
         if((p = strchr(filename, '\n')) != NULL){		// fix filename
-			printf("in the filenam fixer\n");
+			//printf("in the filenam fixer\n");
             *p = '\0';								
         }
 
-		printf("Opening %s for reading\n", filename);	//open filename
+		printf("Opening \"%s\" for reading\n", filename);	//open filename
 		fp = fopen(filename,"r"); 
 
 		//GET MATRICES DIMENSIONS
 	    fscanf(fp, "%d %d %d", &m, &n, &k);
-		newline();
+//		newline();
 
 //CONSOLIDATE THESE MALLOCS TO BEFORE THE IF ELSE IF POSSIBLE
 
@@ -54,7 +50,7 @@ int main(int argc, char const *argv[]){
 		fillmatfromfile(fp, host_b, n, k);
 		
 		if(!fclose(fp)){
-			printf("CLOsinG TiME\n");
+			printf("Closed \"%s\"\n", filename);
 		}else{
 			printf("No Close for YOU\n");
 		}
@@ -65,56 +61,49 @@ int main(int argc, char const *argv[]){
 	    printf(" to a file (y/n)? ");
 		
 		dec = getchar();
-		//printf("%c\n", (char)dec);
 
 		// *** can you clean up the flow? this is in both if and else. 
 		if(dec == 'y'){			// saves the randome matricies to a file
 
-			printf("dec = %d\n", (int)dec);
 			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX
-			printf("dec = %d\n", (int)dec);
 
 			printf("Enter filename for saving: ");
 			fileerror = fgets(filename, BUFFSIZE ,stdin);
 			if(fileerror == NULL){
-				printf("Could not open %s\n", filename);
+				printf("Could not open \"%s\"\n", filename);
 			}
-			//FILENAME FIXER
+			// filename fixer
 			if((p = strchr(filename, '\n')) != NULL){ //remove newline
-//				printf("in the filename fixer\n");
 				*p = '\0';								
 			}
 
-			printf("Opening %s for writing\n", filename);
 			if(fp = fopen(filename,"w")){
-				printf("Opened %s for writing\n", filename);
+				printf("Opened \"%s\" for writing\n", filename);
 			}else{
-				printf("Could not open %s for writing\n", filename);
+				printf("Could not open \"%s\" for writing\n", filename);
 			}	
 	
 		    printf("please type in array dimensions m, n, and k: ");
 		    scanf("%d %d %d", &m, &n, &k);
-
 // YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
 			cudaMallocHost((void **) &host_a, sizeof(int) * m * n); // first array
 			cudaMallocHost((void **) &host_b, sizeof(int) * n * k); // second array
 			cudaMallocHost((void **) &host_c, sizeof(int) * m * k); // product
 
-			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX ?????????
+//			while((dec = getchar()) != '\n' && dec != EOF){} // for clearing inbuff XXXXXXXXXX ?????????
 
 			// fills Matrices and stores them in a file
 			matfilefill(fp, host_a, host_b, m, n, k);
-			printf("Matrices filled and output to file %s\n", filename);
+			printf("Matrices filled and output to file \"%s\"\n", filename);
 
 			if(!fclose(fp)){
-				printf("Closed %s\n", filename);
+				printf("Closed \"%s\"\n", filename);
 			}else{
 				printf("lol no close for you\n");
 			}
 
-
-
 		}else{ //could check if n but... well... get to that later...
+
 		    printf("please type in array dimensions m, n, and k: ");
 		    scanf("%d %d %d", &m, &n, &k);
 // YOU NEED TO  MOVE THIS TOBEFORE THE IF ELSE STATEMENT!!! THIS IS NOT CLEAN!!
@@ -125,14 +114,15 @@ int main(int argc, char const *argv[]){
 			matfill(host_b, n, k);
 		}
 
-		// PRINT
-			matprint(host_a, m, n);
-			printf("\n");
-			matprint(host_b, n, k);
-			printf("\n");
 	}
 
-printf("OOT OF THE IF?ELSE\n");
+	// PRINT
+	matprint(host_a, m, n);
+	printf("\n");
+	matprint(host_b, n, k);
+	printf("\n");
+
+//printf("OOT OF THE IF?ELSE\n");
 
 	// for measuring time	
 	cudaEvent_t start, stop;
@@ -179,9 +169,9 @@ printf("OOT OF THE IF?ELSE\n");
 	cudaFree(dev_a);
 	cudaFree(dev_b);
 	cudaFree(dev_c);
-	printf("cudaFreed\n");
+//	printf("cudaFreed\n");
 	cudaFreeHost(host_a);
-	printf("cudaFreedHost\n");
+//	printf("cudaFreedHost\n");
 	cudaFreeHost(host_b);
 	cudaFreeHost(host_c);
 

@@ -78,14 +78,8 @@ void fillmatfromfile(FILE * fp, int *host_arr, int m, int n){
 			for(j = 0;j < n; ++j){
 				fscanf(fp, "%d", &temp);
 				host_arr[i * n + j] = temp;
-			printf("%d", temp);
-		//		while(fgets(buff, BUFFSIZE,fp)){};
-		//	    printf("%s",buff);
-	//		    printf("\n");
-//				host_arr[i * n + j] = rand() % 512;// SET IT EQUAL TO THE OUTPUT OF THE FILE
-//                printf("%d\n",host_arr[i * n + j]);
 			}
-		printf("\n");
+//		printf("\n");
 		}	
 }
 
